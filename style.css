@@ -1,0 +1,61 @@
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+::-webkit-scrollbar-thumb {
+    background: #1a4d2e; 
+    border-radius: 4px;
+}
+
+/* Menyembunyikan Scrollbar Horizontal */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Animasi smooth */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toast Notification Styling */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+}
+.toast {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    border-left: 5px solid #1a4d2e;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+.toast.show {
+    transform: translateX(0);
+}
+
+/* Navbar Transition */
+.nav-scrolled {
+    background-color: #1a4d2e !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}

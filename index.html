@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Resmi Desa Sejahtera - KKN 2026</title>
+    <!-- Menggunakan Tailwind CSS untuk Desain Estetik -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Link ke CSS External -->
+    <link rel="stylesheet" href="style.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        desaGreen: '#1a4d2e',
+                        desaLight: '#4f9a6e',
+                        desaGold: '#ffcf40',
+                        desaCream: '#f9f7f2',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-desaCream text-gray-800 font-sans antialiased">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-transparent py-6" id="navbar">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            
+            <!-- 1. Logo & Nama Desa -->
+            <div class="flex items-center space-x-3">
+                <!-- 
+                    LOGO DESA (Tanpa Bulat Putih):
+                    Ganti 'src' dengan nama file logo Anda (misal: logo.png).
+                    Class 'h-12' mengatur tinggi logo agar pas dengan teks.
+                -->
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0pNJ127PY9RuavgRPRlrnoVNrcgoKFKQuiYvjyAAP8Wby2jh9B2lW9ANCj5JT7lybbYpoF9QjU42krQXSoTfLDjXAB6UNwUPp5zYLrZpbeOd3kk8ivCms-IC8q7fP-aDWn66zmpkg2_fpw-7rWUkIUKh1VEahUvR2hCVGBzj9S9Ngkn5_4MnSTA/s825/Kabupaten%20Lampung%20Selatan%20[koleksilogo.com].png" alt="Logo Desa" class="h-12 w-auto object-contain drop-shadow-md">
+                
+                <div class="text-left text-white drop-shadow-md">
+                    <h1 class="text-xl font-bold leading-none text-desaGold">DESA RULUNG SARI</h1>
+                    <p class="text-xs text-gray-200">Kabupaten Lampung Sari</p>
+                </div>
+            </div>
+
+            <!-- 2. Menu Navigasi -->
+            <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide text-white items-center">
+                <a href="#" onclick="showPage('home')" class="hover:text-desaGold transition duration-300 relative group">
+                    BERANDA
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-desaGold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#profil" class="hover:text-desaGold transition duration-300 relative group">
+                    PROFIL
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-desaGold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#berita" class="hover:text-desaGold transition duration-300 relative group">
+                    BERITA
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-desaGold transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#galeri" class="hover:text-desaGold transition duration-300 relative group">
+                    GALERI
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-desaGold transition-all group-hover:w-full"></span>
+                </a>
+                <!-- Tambah Menu LOKASI -->
+                <a href="#lokasi" class="hover:text-desaGold transition duration-300 relative group">
+                    LOKASI
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-desaGold transition-all group-hover:w-full"></span>
+                </a>
+                
+                <!-- Login Button Kecil di Menu -->
+                 <button onclick="checkLoginState()" class="border border-white/30 hover:bg-white hover:text-desaGreen text-white px-4 py-1.5 rounded-full text-xs font-bold transition">
+                    <i class="fas fa-lock mr-1"></i> Admin
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white focus:outline-none drop-shadow-md" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-desaGreen absolute w-full left-0 top-full pb-4 px-6 shadow-xl border-t border-green-800">
+            <a href="#" onclick="showPage('home')" class="block py-3 text-white hover:text-desaGold border-b border-green-700">Beranda</a>
+            <a href="#profil" class="block py-3 text-white hover:text-desaGold border-b border-green-700">Profil</a>
+            <a href="#berita" class="block py-3 text-white hover:text-desaGold border-b border-green-700">Berita</a>
+            <a href="#galeri" class="block py-3 text-white hover:text-desaGold border-b border-green-700">Galeri</a>
+            <a href="#lokasi" class="block py-3 text-white hover:text-desaGold border-b border-green-700">Lokasi</a>
+            <button onclick="checkLoginState()" class="block w-full text-left py-3 text-desaGold font-bold mt-2">
+                <i class="fas fa-user-shield mr-2"></i> Area Admin
+            </button>
+        </div>
+    </nav>
+
+    <!-- CONTENT CONTAINER -->
+    <div id="app-content">
+        
+        <!-- HALAMAN UTAMA (PUBLIC) -->
+        <div id="page-home" class="fade-in">
+            <!-- Hero Section -->
+            <header class="relative h-[100vh] flex items-center justify-center text-center text-white overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60 z-10"></div>
+                
+                <!-- BACKGROUND SLIDER -->
+                <div id="hero-backgrounds" class="absolute inset-0 w-full h-full">
+                    <!-- Slide 1 (Active by default) -->
+                    <img src="image\foto desa.jpeg" 
+                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100" 
+                         alt="Pemandangan Desa 1">
+                    
+                    <!-- Slide 2 -->
+                    <img src="image\foto 4.jpeg" 
+                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" 
+                         alt="Pemandangan Desa 2">
+                    
+                    <!-- Slide 3 -->
+                    <img src="image\foto 6.jpeg" 
+                         class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0" 
+                         alt="Pemandangan Desa 3">
+                </div>
+                
+                <div class="relative z-20 px-4 max-w-4xl mx-auto mt-16">
+                    <span class="bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block shadow-lg">
+                        Website Resmi
+                    </span>
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl leading-tight">
+                        Selamat Datang di <br><span class="text-desaGold">Desa Rulung Sari</span>
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 font-light text-gray-100 max-w-2xl mx-auto drop-shadow-md" id="hero-desc">
+                       Menuju desa yang mandiri, berbudaya, dan teknologi tepat guna bersama program KKN Universitas Kita.
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-4 justify-center">
+                        <a href="#profil" class="bg-desaGreen hover:bg-green-800 text-white px-8 py-3 rounded-full font-semibold transition shadow-lg transform hover:-translate-y-1 hover:shadow-green-500/50">Jelajahi Desa</a>
+                    </div>
+                </div>
+
+                <!-- Scroll Down Indicator -->
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+                    <a href="#profil" class="text-white opacity-80 hover:opacity-100">
+                        <i class="fas fa-chevron-down text-3xl"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Section Profil -->
+            <section id="profil" class="py-24 px-6 bg-white">
+                <div class="container mx-auto max-w-6xl">
+                    <div class="flex flex-col md:flex-row items-center gap-16">
+                        <div class="w-full md:w-1/2">
+                            <div class="relative group">
+                                <div class="absolute -top-4 -left-4 w-24 h-24 bg-desaGold/30 rounded-full z-0 group-hover:bg-desaGold/50 transition duration-500"></div>
+                                <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-desaGreen/20 rounded-full z-0 group-hover:bg-desaGreen/40 transition duration-500"></div>
+                                <img src="image\foto desa.jpeg" 
+                                     class="relative z-10 rounded-tr-[4rem] rounded-bl-[4rem] shadow-2xl w-full object-cover h-96 border-4 border-white transform transition duration-500 hover:scale-[1.02]" alt="Balai Desa">
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="flex items-center mb-3">
+                                <span class="h-0.5 w-10 bg-desaGreen mr-3"></span>
+                                <h2 class="text-desaGreen font-bold text-sm tracking-widest uppercase">Tentang Kami</h2>
+                            </div>
+                            <h3 class="text-4xl font-bold mb-6 text-gray-900 leading-tight">Keindahan Alam & <br>Keramahan Warga</h3>
+                            <p class="text-gray-600 leading-relaxed mb-8 text-lg" id="about-text">
+                                Desa Sejahtera terletak di kaki pegunungan yang asri. Mayoritas penduduk bermata pencaharian sebagai petani dan pengrajin. Kami berkomitmen untuk memajukan desa melalui digitalisasi tanpa meninggalkan kearifan lokal.
+                            </p>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="bg-desaCream p-5 rounded-2xl border-l-4 border-desaGreen">
+                                    <!-- ID Added for Dynamic Data -->
+                                    <h4 id="public-population" class="font-bold text-3xl text-desaGreen mb-1">1.2k+</h4>
+                                    <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Penduduk</p>
+                                </div>
+                                <div class="bg-desaCream p-5 rounded-2xl border-l-4 border-desaGold">
+                                    <!-- ID Added for Dynamic Data -->
+                                    <h4 id="public-land" class="font-bold text-3xl text-desaGold mb-1">450Ha</h4>
+                                    <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Lahan Tani</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Berita (SLIDER 3 KOLOM) -->
+            <section id="berita" class="py-24 bg-gray-50 px-6 overflow-hidden">
+                <div class="container mx-auto max-w-6xl relative">
+                    <div class="text-center mb-12">
+                        <span class="text-desaGold font-bold text-sm tracking-widest uppercase">Update Terbaru</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Kabar Desa Terkini</h2>
+                        <div class="w-24 h-1 bg-desaGreen mx-auto mt-4 rounded-full"></div>
+                    </div>
+                    
+                    <!-- Wrapper Slider -->
+                    <div class="relative group">
+                        <!-- Tombol Kiri -->
+                        <button onclick="scrollNews('left')" class="hidden md:block absolute -left-12 top-1/2 -translate-y-1/2 z-20 bg-white text-desaGreen w-12 h-12 rounded-full shadow-xl hover:bg-desaGreen hover:text-white transition duration-300 opacity-80 hover:opacity-100 focus:outline-none border border-gray-100 flex items-center justify-center">
+                            <i class="fas fa-chevron-left text-lg"></i>
+                        </button>
+
+                        <!-- Container Kartu Berita -->
+                        <div id="news-container" class="flex overflow-x-auto gap-6 scroll-smooth hide-scrollbar py-6 snap-x snap-mandatory">
+                            <!-- Berita di-render oleh JavaScript -->
+                        </div>
+
+                        <!-- Tombol Kanan -->
+                        <button onclick="scrollNews('right')" class="hidden md:block absolute -right-12 top-1/2 -translate-y-1/2 z-20 bg-white text-desaGreen w-12 h-12 rounded-full shadow-xl hover:bg-desaGreen hover:text-white transition duration-300 opacity-80 hover:opacity-100 focus:outline-none border border-gray-100 flex items-center justify-center">
+                            <i class="fas fa-chevron-right text-lg"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Indikator Geser (Mobile Only) -->
+                    <div class="md:hidden text-center mt-4 text-xs text-gray-400 animate-pulse">
+                        <i class="fas fa-arrows-alt-h mr-1"></i> Geser untuk melihat lainnya
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Galeri (SLIDER 4 KOLOM) -->
+            <section id="galeri" class="py-24 bg-white px-6 overflow-hidden">
+                <div class="container mx-auto max-w-6xl text-center relative">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Galeri Desa</h2>
+                    
+                    <!-- Wrapper Slider Galeri -->
+                    <div class="relative group">
+                        <!-- Tombol Kiri Galeri -->
+                        <button onclick="scrollGallery('left')" class="hidden md:block absolute -left-12 top-1/2 -translate-y-1/2 z-20 bg-white text-desaGreen w-12 h-12 rounded-full shadow-xl hover:bg-desaGreen hover:text-white transition duration-300 opacity-80 hover:opacity-100 focus:outline-none border border-gray-100 flex items-center justify-center">
+                            <i class="fas fa-chevron-left text-lg"></i>
+                        </button>
+
+                        <!-- Container Galeri -->
+                        <div id="gallery-container" class="flex overflow-x-auto gap-4 scroll-smooth hide-scrollbar py-6 snap-x snap-mandatory text-left">
+                           <!-- Foto-foto akan muncul di sini -->
+                        </div>
+
+                        <!-- Tombol Kanan Galeri -->
+                        <button onclick="scrollGallery('right')" class="hidden md:block absolute -right-12 top-1/2 -translate-y-1/2 z-20 bg-white text-desaGreen w-12 h-12 rounded-full shadow-xl hover:bg-desaGreen hover:text-white transition duration-300 opacity-80 hover:opacity-100 focus:outline-none border border-gray-100 flex items-center justify-center">
+                            <i class="fas fa-chevron-right text-lg"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Indikator Geser (Mobile Only) -->
+                    <div class="md:hidden text-center mt-4 text-xs text-gray-400 animate-pulse">
+                        <i class="fas fa-arrows-alt-h mr-1"></i> Geser untuk melihat foto lainnya
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Lokasi (NEW) -->
+            <section id="lokasi" class="py-24 bg-gray-50 px-6">
+                <div class="container mx-auto max-w-6xl text-center">
+                    <div class="mb-12">
+                        <span class="text-desaGold font-bold text-sm tracking-widest uppercase">Peta Wilayah</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Lokasi Desa</h2>
+                        <div class="w-24 h-1 bg-desaGreen mx-auto mt-4 rounded-full"></div>
+                    </div>
+                    
+                    <div class="w-full h-96 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white transform transition hover:scale-[1.01] duration-300">
+                        <!-- Google Maps Embed -->
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.244225266268!2d105.21255412692656!3d-5.224279930356535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40c80ae73e68ab%3A0x9fd0a4beabbd48b0!2sRulung%20Sari%2C%20Kec.%20Natar%2C%20Kabupaten%20Lampung%20Selatan!5e0!3m2!1sid!2sid!4v1707033600000" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                        
+                        <!-- Overlay Label (Optional) -->
+                        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-xl text-xs font-bold text-desaGreen shadow-lg border border-gray-100 flex items-center">
+                            <i class="fas fa-map-marked-alt mr-2 text-desaGold text-lg"></i> Peta Desa Rulung Sari
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex flex-col md:flex-row justify-center gap-6 text-gray-600">
+                        <div class="bg-white px-6 py-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3">
+                            <div class="bg-green-100 p-2 rounded-full text-desaGreen"><i class="fas fa-map-marker-alt"></i></div>
+                            <span class="text-sm font-semibold">Rulung Sari, Kec. Natar, Kabupaten Lampung Selatan</span>
+                        </div>
+                        <a href="https://www.google.com/maps/search/Rulung+Sari,+Kec.+Natar,+Kabupaten+Lampung+Selatan/@-5.4089,104.72918,15z" target="_blank" rel="noopener noreferrer" class="bg-white px-6 py-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3 hover:bg-desaGreen hover:text-white hover:border-desaGreen transition duration-300 cursor-pointer">
+                            <div class="bg-yellow-100 p-2 rounded-full text-desaGold"><i class="fas fa-location-arrow"></i></div>
+                            <span class="text-sm font-semibold">Lihat Rute di Google Maps</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="bg-desaGreen text-white py-16 px-6">
+                <div class="container mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <!-- LOGO DESA FOOTER (Tanpa Bulat Putih) -->
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0pNJ127PY9RuavgRPRlrnoVNrcgoKFKQuiYvjyAAP8Wby2jh9B2lW9ANCj5JT7lybbYpoF9QjU42krQXSoTfLDjXAB6UNwUPp5zYLrZpbeOd3kk8ivCms-IC8q7fP-aDWn66zmpkg2_fpw-7rWUkIUKh1VEahUvR2hCVGBzj9S9Ngkn5_4MnSTA/s825/Kabupaten%20Lampung%20Selatan%20[koleksilogo.com].png" alt="Logo Desa" class="h-12 w-auto object-contain">
+                            
+                            <h3 class="text-2xl font-bold tracking-wide">Desa Rulung Sari</h3>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                            Mewujudkan Desa Rulung Sari Menjadi Desa Mandiri Melalui Bidang Pertanian Dan Industri Kecil.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a href="https://www.tiktok.com/@karangtarunarulungasari?_r=1&_t=ZS-93dyxrKDi1k" class="bg-white/10 hover:bg-desaGold hover:text-desaGreen w-10 h-10 rounded-full flex items-center justify-center transition"><i class="fab fa-tiktok"></i></a>
+                            <a href="#" class="bg-white/10 hover:bg-desaGold hover:text-desaGreen w-10 h-10 rounded-full flex items-center justify-center transition"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="bg-white/10 hover:bg-desaGold hover:text-desaGreen w-10 h-10 rounded-full flex items-center justify-center transition"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-6 text-desaGold border-b border-white/20 pb-2 inline-block">Kontak Penting</h4>
+                        <ul class="text-sm text-gray-300 space-y-4">
+                            <li class="flex items-start"><i class="fas fa-phone mt-1 mr-3 text-desaGold"></i> <span>+62 813 7904 4240 (Kepala Desa)</span></li>
+                            <li class="flex items-start"><i class="fas fa-phone mt-1 mr-3 text-desaGold"></i> <span>+62 813 6831 5634 /+62 853 7977 5688 (Pelayanan)</span></li>
+                            <li class="flex items-start"><i class="fas fa-envelope mt-1 mr-3 text-desaGold"></i> <span>desarulungsari22@gmail.com</span></li>
+                            <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 text-desaGold"></i> <span>Rulung Sari, Kec. Natar, Kabupaten Lampung Selatan</span></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-6 text-desaGold border-b border-white/20 pb-2 inline-block">Jam Pelayanan</h4>
+                        <ul class="text-sm text-gray-300 space-y-3 bg-white/5 p-4 rounded-xl">
+                            <li class="flex justify-between border-b border-white/10 pb-2"><span>Senin - Kamis</span> <span class="font-semibold text-white">08:00 - 15:00</span></li>
+                            <li class="flex justify-between border-b border-white/10 pb-2"><span>Jumat</span> <span class="font-semibold text-white">08:00 - 11:00</span></li>
+                            <li class="flex justify-between text-desaGold font-bold"><span>Sabtu - Minggu</span> <span>Libur</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-green-800 mt-12 pt-8 text-center text-xs text-gray-400">
+                    &copy; KKN Universitas Lampung Periode 1 Tahun 2026.
+                </div>
+            </footer>
+        </div>
+
+        <!-- MODAL DETAIL BERITA (POP-UP) -->
+        <div id="news-modal" class="hidden fixed inset-0 z-[60] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <!-- Background overlay -->
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeNewsModal()"></div>
+
+                <!-- Positioning trick for center alignment -->
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <!-- Modal panel -->
+                <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full relative">
+                    
+                    <!-- Close Button -->
+                    <button onclick="closeNewsModal()" class="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition focus:outline-none w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                    <!-- Image -->
+                    <div class="relative h-64 sm:h-80">
+                        <img id="modal-image" src="" alt="Detail Berita" class="w-full h-full object-cover">
+                        <div class="absolute bottom-4 left-4">
+                            <span id="modal-category" class="bg-desaGold text-desaGreen text-xs font-bold px-3 py-1 rounded-full shadow">Kategori</span>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="px-6 py-6 sm:px-8">
+                        <div class="mb-4 border-b border-gray-100 pb-4">
+                            <p class="text-sm text-gray-500 flex items-center mb-2">
+                                <i class="far fa-calendar-alt mr-2 text-desaLight"></i> <span id="modal-date">Tanggal</span>
+                            </p>
+                            <h3 id="modal-title" class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">Judul Berita</h3>
+                        </div>
+                        
+                        <div class="prose max-w-none text-gray-600 leading-relaxed text-justify space-y-4" id="modal-content">
+                            <!-- Isi berita akan muncul di sini -->
+                        </div>
+
+                        <div class="mt-8 pt-4 border-t border-gray-100 text-right">
+                            <button type="button" onclick="closeNewsModal()" class="inline-flex justify-center px-6 py-2 text-sm font-bold text-desaGreen bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 focus:outline-none transition">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN LOGIN ADMIN -->
+        <div id="page-login" class="hidden min-h-screen flex items-center justify-center bg-gray-100 px-4 pt-20">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md fade-in relative overflow-hidden">
+                <!-- ... Login form ... -->
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-desaGreen to-desaGold"></div>
+                <div class="text-center mb-8">
+                    <i class="fas fa-user-shield text-4xl text-desaGreen mb-4"></i>
+                    <h2 class="text-2xl font-bold text-gray-800">Login Administrator</h2>
+                    <p class="text-gray-500 text-sm">Silahkan masuk untuk mengelola konten.</p>
+                </div>
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                        <input type="text" id="username" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-desaGreen focus:ring-2 focus:ring-green-200 outline-none transition" placeholder="admin">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="password" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-desaGreen focus:ring-2 focus:ring-green-200 outline-none transition" placeholder="******">
+                    </div>
+                    <button type="submit" class="w-full bg-desaGreen text-white font-bold py-3 rounded-lg hover:bg-green-800 transition transform hover:scale-[1.02]">
+                        MASUK
+                    </button>
+                </form>
+                <div class="mt-6 text-center">
+                    <a href="#" onclick="showPage('home')" class="text-sm text-gray-500 hover:text-desaGreen">Kembali ke Beranda</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN DASHBOARD ADMIN -->
+        <div id="page-admin" class="hidden min-h-screen bg-gray-100 pb-20 pt-20">
+            <div class="bg-desaGreen text-white py-10 px-6 shadow-lg">
+                <div class="container mx-auto max-w-6xl flex justify-between items-end">
+                    <div>
+                        <h2 class="text-3xl font-bold">Dashboard Admin</h2>
+                        <p class="text-green-200">Kelola konten website desa dengan mudah.</p>
+                    </div>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="container mx-auto max-w-6xl mt-[-30px] px-6">
+                <!-- Tabs -->
+                <div class="flex space-x-4 mb-6 overflow-x-auto pb-2">
+                    <button onclick="switchAdminTab('berita')" id="tab-berita" class="bg-white text-desaGreen px-6 py-3 rounded-t-lg font-bold shadow-md border-b-2 border-desaGold whitespace-nowrap">Kelola Berita</button>
+                    <button onclick="switchAdminTab('galeri')" id="tab-galeri" class="bg-desaGreen text-white px-6 py-3 rounded-t-lg font-bold shadow-md opacity-70 hover:opacity-100 whitespace-nowrap">Kelola Galeri</button>
+                    <button onclick="switchAdminTab('info')" id="tab-info" class="bg-desaGreen text-white px-6 py-3 rounded-t-lg font-bold shadow-md opacity-70 hover:opacity-100 whitespace-nowrap">Info Desa</button>
+                </div>
+
+                <!-- Admin: Kelola Berita -->
+                <div id="admin-panel-berita" class="bg-white rounded-lg shadow-md p-6 fade-in">
+                    <h3 class="text-xl font-bold mb-4 border-b pb-2">Tambah Berita Baru</h3>
+                    <form onsubmit="addNews(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Judul Berita</label>
+                            <input type="text" id="newsTitle" required class="w-full p-2 border rounded focus:border-desaGreen outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Tanggal</label>
+                            <input type="date" id="newsDate" required class="w-full p-2 border rounded focus:border-desaGreen outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Kategori</label>
+                            <select id="newsCategory" class="w-full p-2 border rounded focus:border-desaGreen outline-none">
+                                <option>Pembangunan</option>
+                                <option>Sosial</option>
+                                <option>Pengumuman</option>
+                                <option>Ekonomi</option>
+                                <option>Organisasi</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Ringkasan Berita (Tampilan Depan)</label>
+                            <textarea id="newsContent" rows="2" required placeholder="Teks pendek untuk kartu berita..." class="w-full p-2 border rounded focus:border-desaGreen outline-none"></textarea>
+                        </div>
+                        <!-- NEW: Field Isi Detail -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Isi Lengkap Berita (Pop-up Detail)</label>
+                            <textarea id="newsDetail" rows="6" required placeholder="Tulis isi berita selengkapnya di sini..." class="w-full p-2 border rounded focus:border-desaGreen outline-none"></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Upload Gambar Berita</label>
+                            <!-- Updated Input to File -->
+                            <input type="file" id="newsImage" accept="image/*" class="block w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-desaGreen file:text-white
+                                hover:file:bg-green-700
+                                transition
+                            "/>
+                            <p class="text-xs text-gray-500 mt-1">*Format gambar (jpg/png). Jika tidak diupload akan menggunakan gambar default.</p>
+                        </div>
+                        <div class="md:col-span-2 text-right">
+                            <button type="submit" class="bg-desaGreen text-white px-6 py-2 rounded font-bold hover:bg-green-800 transition">
+                                <i class="fas fa-plus mr-2"></i> Posting Berita
+                            </button>
+                        </div>
+                    </form>
+
+                    <h3 class="text-xl font-bold mb-4 border-b pb-2">Daftar Berita Aktif</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-sm uppercase">
+                                    <th class="p-3">Tanggal</th>
+                                    <th class="p-3">Judul</th>
+                                    <th class="p-3">Kategori</th>
+                                    <th class="p-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-news-table">
+                                <!-- Data Berita Admin di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Admin: Kelola Galeri -->
+                <div id="admin-panel-galeri" class="bg-white rounded-lg shadow-md p-6 fade-in hidden">
+                    <h3 class="text-xl font-bold mb-4 border-b pb-2">Tambah Foto Galeri</h3>
+                    <form onsubmit="addGallery(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Judul Foto</label>
+                            <input type="text" id="galleryTitle" required class="w-full p-2 border rounded focus:border-desaGreen outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Upload File Foto</label>
+                            <!-- Updated Input to File -->
+                            <input type="file" id="galleryImage" accept="image/*" required class="block w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-desaGreen file:text-white
+                                hover:file:bg-green-700
+                                transition
+                            "/>
+                        </div>
+                        <div class="md:col-span-2 text-right">
+                            <button type="submit" class="bg-desaGreen text-white px-6 py-2 rounded font-bold hover:bg-green-800 transition">
+                                <i class="fas fa-plus mr-2"></i> Tambah Foto
+                            </button>
+                        </div>
+                    </form>
+
+                    <h3 class="text-xl font-bold mb-4 border-b pb-2">Daftar Foto Galeri</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="admin-gallery-list">
+                        <!-- Admin Gallery Items Rendered Here -->
+                    </div>
+                </div>
+
+                <!-- Admin: Edit Info Desa -->
+                <div id="admin-panel-info" class="bg-white rounded-lg shadow-md p-6 fade-in hidden">
+                    <!-- ... Edit Info form ... -->
+                    <h3 class="text-xl font-bold mb-4 border-b pb-2">Edit Informasi Desa</h3>
+                    <form onsubmit="updateVillageInfo(event)">
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Deskripsi Hero (Singkat)</label>
+                            <input type="text" id="editHeroDesc" class="w-full p-2 border rounded focus:border-desaGreen outline-none">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Tentang Desa (Lengkap)</label>
+                            <textarea id="editAboutText" rows="5" class="w-full p-2 border rounded focus:border-desaGreen outline-none"></textarea>
+                        </div>
+                        <!-- NEW: Statistik Editor -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Jumlah Penduduk</label>
+                                <input type="text" id="editPopulation" class="w-full p-2 border rounded focus:border-desaGreen outline-none" placeholder="1.2k+">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Luas Lahan</label>
+                                <input type="text" id="editLand" class="w-full p-2 border rounded focus:border-desaGreen outline-none" placeholder="450Ha">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-desaGold text-desaGreen px-6 py-2 rounded font-bold hover:bg-yellow-400 transition">
+                            <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- JAVASCRIPT LOGIC - Link ke File External -->
+    <script src="script.js"></script>
+</body>
+</html>
