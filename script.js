@@ -12,79 +12,52 @@ const convertBase64 = (file) => {
     });
 };
 
+// --- INITIALIZE REALTIME LISTENERS ---
+function initializeFirebaseListeners() {
+    console.log("Initializing Firebase Listeners...");
+    
+    // Listen to News Data (Real-time update)
+    database.ref('desa/news').on('value', (snapshot) => {
+        if (snapshot.exists()) {
+            const newsObj = snapshot.val();
+            // Convert object to array if needed
+            newsData = Array.isArray(newsObj) ? newsObj : Object.values(newsObj);
+            console.log("News updated:", newsData);
+            renderPublic(); // Update UI immediately
+        } else {
+            newsData = [];
+        }
+    });
+
+    // Listen to Gallery Data (Real-time update)
+    database.ref('desa/gallery').on('value', (snapshot) => {
+        if (snapshot.exists()) {
+            const galleryObj = snapshot.val();
+            // Convert object to array if needed
+            galleryData = Array.isArray(galleryObj) ? galleryObj : Object.values(galleryObj);
+            console.log("Gallery updated:", galleryData);
+            renderPublic(); // Update UI immediately
+        } else {
+            galleryData = [];
+        }
+    });
+
+    // Listen to Village Info (Real-time update)
+    database.ref('desa/info').on('value', (snapshot) => {
+        if (snapshot.exists()) {
+            villageInfo = snapshot.val();
+            console.log("Village info updated:", villageInfo);
+            renderPublic(); // Update UI immediately
+        }
+    });
+}
+
 // --- 1. DATA MANAGEMENT ---
 
-// Data Berita Default (Updated structure)
-const defaultNews = [
-    {
-        id: 1,
-        title: "Kerja Bakti Membersihkan Saluran Irigasi",
-        date: "2026-01-15",
-        category: "Sosial",
-        summary: "Warga desa bahu membahu membersihkan saluran irigasi untuk menyambut musim tanam padi tahun ini.",
-        detail: "Warga desa bahu membahu membersihkan saluran irigasi untuk menyambut musim tanam padi tahun ini. Kegiatan ini dipimpin langsung oleh Kepala Desa dan diikuti oleh seluruh elemen masyarakat. Saluran irigasi yang bersih sangat penting untuk memastikan pasokan air yang lancar ke sawah-sawah warga.",
-        image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        id: 2,
-        title: "Penyuluhan Teknologi Pertanian dari Mahasiswa KKN",
-        date: "2026-01-10",
-        category: "Pembangunan",
-        summary: "Mahasiswa KKN memberikan pelatihan pembuatan pupuk organik cair kepada kelompok tani desa.",
-        detail: "Mahasiswa KKN memberikan pelatihan pembuatan pupuk organik cair kepada kelompok tani desa. Pelatihan ini bertujuan untuk mengurangi ketergantungan petani pada pupuk kimia yang harganya semakin mahal. Pupuk organik cair ini dibuat dari limbah rumah tangga dan bahan-bahan alami yang mudah didapat di sekitar desa.",
-        image: "https://images.unsplash.com/photo-1592982537447-6f2a6a0c7c18?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        id: 3,
-        title: "Jadwal Posyandu Balita & Lansia Bulan Ini",
-        date: "2026-01-20",
-        category: "Pengumuman",
-        summary: "Diharapkan kehadiran ibu balita dan lansia di Balai Desa pada hari Selasa pukul 08.00 WIB.",
-        detail: "Diharapkan kehadiran ibu balita dan lansia di Balai Desa pada hari Selasa pukul 08.00 WIB untuk mengikuti kegiatan Posyandu rutin. Akan ada pemeriksaan kesehatan, pemberian vitamin, dan makanan tambahan. Jangan lupa membawa buku KIA dan kartu berobat.",
-        image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        id: 4,
-        title: "Pasar Murah Desa Sejahtera",
-        date: "2026-02-01",
-        category: "Ekonomi",
-        summary: "Pemerintah desa bekerjasama dengan BUMDes mengadakan pasar murah untuk kebutuhan pokok warga.",
-        detail: "Pemerintah desa bekerjasama dengan BUMDes mengadakan pasar murah untuk membantu warga memenuhi kebutuhan pokok dengan harga terjangkau. Berbagai komoditas seperti beras, minyak goreng, gula, dan telur tersedia dengan harga di bawah harga pasar. Antusiasme warga sangat tinggi menyambut kegiatan ini.",
-        image: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    },
-     {
-        id: 5,
-        title: "Pemilihan Ketua Karang Taruna Baru",
-        date: "2026-02-05",
-        category: "Sosial",
-        summary: "Pemilihan berlangsung demokratis di balai desa dengan antusiasme pemuda yang tinggi.",
-        detail: "Pemilihan Ketua Karang Taruna periode 2026-2029 telah dilaksanakan di balai desa. Acara berlangsung demokratis dan dihadiri oleh perwakilan pemuda dari setiap dusun. Ketua terpilih diharapkan dapat membawa inovasi dan semangat baru bagi kegiatan kepemudaan di desa.",
-        image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-    }
-];
-
-// Data Galeri Default (URL Eksternal)
-const defaultGallery = [
-    { id: 1, title: "Pemandangan Pagi", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef" },
-    { id: 2, title: "Balai Desa", image: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5" },
-    { id: 3, title: "Panen Raya", image: "https://images.unsplash.com/photo-1592982537447-6f2a6a0c7c18" },
-    { id: 4, title: "Gotong Royong", image: "https://images.unsplash.com/photo-1593113598332-cd288d649433" },
-    { id: 5, title: "Keindahan Alam", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399" },
-    { id: 6, title: "Air Terjun Desa", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb" },
-    { id: 7, title: "Musyawarah Warga", image: "https://images.unsplash.com/photo-1530268578403-ade5843397d4" },
-    { id: 8, title: "Pertanian Modern", image: "https://images.unsplash.com/photo-1605000797499-95a059e51b6b" }
-];
-
-// Inisialisasi Data
-let newsData = JSON.parse(localStorage.getItem('desa_news')) || defaultNews;
-let galleryData = JSON.parse(localStorage.getItem('desa_gallery')) || defaultGallery;
-// CHANGE THIS KEY to force update for user
-let villageInfo = JSON.parse(localStorage.getItem('desa_info_v3')) || {
-    heroDesc: "Menuju desa yang mandiri, berbudaya, dan teknologi tepat guna bersama program KKN Universitas Kita.",
-    aboutText: "Desa Sejahtera terletak di kaki pegunungan yang asri. Mayoritas penduduk bermata pencaharian sebagai petani dan pengrajin. Kami berkomitmen untuk memajukan desa melalui digitalisasi tanpa meninggalkan kearifan lokal.",
-    populationCount: "1.200+",
-    landArea: "450Ha"
-};
+// Initialize empty arrays
+let newsData = [];
+let galleryData = [];
+let villageInfo = {};
 
 // --- 2. RENDER FUNCTIONS ---
 
@@ -213,22 +186,22 @@ function scrollGallery(direction) {
 
 function renderAdminTable() {
     // Populate Form inputs with current info
-    document.getElementById('editHeroDesc').value = villageInfo.heroDesc;
-    document.getElementById('editAboutText').value = villageInfo.aboutText;
-    document.getElementById('editPopulation').value = villageInfo.populationCount;
-    document.getElementById('editLand').value = villageInfo.landArea;
+    document.getElementById('editHeroDesc').value = villageInfo.heroDesc || "";
+    document.getElementById('editAboutText').value = villageInfo.aboutText || "";
+    document.getElementById('editPopulation').value = villageInfo.populationCount || "";
+    document.getElementById('editLand').value = villageInfo.landArea || "";
 
     // Render Table Berita
     const tbody = document.getElementById('admin-news-table');
     tbody.innerHTML = '';
-    newsData.forEach((news, index) => {
+    newsData.forEach((news) => {
         const row = `
             <tr class="border-b hover:bg-gray-50 transition">
                 <td class="p-3 text-sm text-gray-600">${news.date}</td>
                 <td class="p-3 font-semibold text-gray-800">${news.title}</td>
                 <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">${news.category}</span></td>
                 <td class="p-3 text-center">
-                    <button onclick="deleteNews(${index})" class="text-red-500 hover:text-red-700 bg-red-100 hover:bg-red-200 p-2 rounded-full transition">
+                    <button onclick="deleteNewsFromFirebase('${news.id}')" class="text-red-500 hover:text-red-700 bg-red-100 hover:bg-red-200 p-2 rounded-full transition">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
@@ -240,14 +213,14 @@ function renderAdminTable() {
     // Render List Galeri
     const galleryList = document.getElementById('admin-gallery-list');
     galleryList.innerHTML = '';
-    galleryData.forEach((item, index) => {
+    galleryData.forEach((item) => {
         const card = `
             <div class="bg-white p-2 rounded-lg shadow border border-gray-200 relative group">
                 <div class="h-32 overflow-hidden rounded mb-2">
                     <img src="${item.image}" class="w-full h-full object-cover">
                 </div>
                 <p class="text-xs font-bold text-gray-700 truncate mb-1">${item.title}</p>
-                <button onclick="deleteGallery(${index})" class="w-full bg-red-100 text-red-600 text-xs py-1 rounded hover:bg-red-200 transition">
+                <button onclick="deleteGalleryFromFirebase('${item.id}')" class="w-full bg-red-100 text-red-600 text-xs py-1 rounded hover:bg-red-200 transition">
                     Hapus
                 </button>
             </div>
@@ -356,7 +329,7 @@ function switchAdminTab(tabName) {
     }
 }
 
-// Updated: Add News with File Support & Detail
+// Updated: Add News with File Support & Detail - FIREBASE VERSION
 async function addNews(e) {
     e.preventDefault();
     const title = document.getElementById('newsTitle').value;
@@ -378,25 +351,17 @@ async function addNews(e) {
         }
     }
 
-    // Save both summary and detail
-    const newArticle = { id: Date.now(), title, date, category, summary, detail, image };
-    newsData.unshift(newArticle);
-    localStorage.setItem('desa_news', JSON.stringify(newsData));
-    renderAdminTable();
-    showToast("Berita berhasil ditambahkan!", "success");
-    e.target.reset();
+    // Save to Firebase
+    addNewsToFirebase(title, date, category, summary, detail, image);
 }
 
 function deleteNews(index) {
-    if(confirm("Apakah Anda yakin ingin menghapus berita ini?")) {
-        newsData.splice(index, 1);
-        localStorage.setItem('desa_news', JSON.stringify(newsData));
-        renderAdminTable();
-        showToast("Berita berhasil dihapus.", "info");
+    if(newsData[index]) {
+        deleteNewsFromFirebase(newsData[index].id);
     }
 }
 
-// Updated: Add Gallery with File Support
+// Updated: Add Gallery with File Support - FIREBASE VERSION
 async function addGallery(e) {
     e.preventDefault();
     const title = document.getElementById('galleryTitle').value;
@@ -409,13 +374,7 @@ async function addGallery(e) {
 
     try {
         const image = await convertBase64(fileInput.files[0]);
-        const newPhoto = { id: Date.now(), title, image };
-        
-        galleryData.unshift(newPhoto);
-        localStorage.setItem('desa_gallery', JSON.stringify(galleryData));
-        renderAdminTable();
-        showToast("Foto berhasil ditambahkan!", "success");
-        e.target.reset();
+        addGalleryToFirebase(title, image);
     } catch (error) {
         console.error("Error:", error);
         showToast("Gagal mengupload gambar.", "error");
@@ -423,24 +382,20 @@ async function addGallery(e) {
 }
 
 function deleteGallery(index) {
-    if(confirm("Hapus foto ini dari galeri?")) {
-        galleryData.splice(index, 1);
-        localStorage.setItem('desa_gallery', JSON.stringify(galleryData));
-        renderAdminTable();
-        showToast("Foto berhasil dihapus.", "info");
+    if(galleryData[index]) {
+        deleteGalleryFromFirebase(galleryData[index].id);
     }
 }
 
 function updateVillageInfo(e) {
     e.preventDefault();
-    villageInfo.heroDesc = document.getElementById('editHeroDesc').value;
-    villageInfo.aboutText = document.getElementById('editAboutText').value;
-    villageInfo.populationCount = document.getElementById('editPopulation').value;
-    villageInfo.landArea = document.getElementById('editLand').value;
+    const heroDesc = document.getElementById('editHeroDesc').value;
+    const aboutText = document.getElementById('editAboutText').value;
+    const populationCount = document.getElementById('editPopulation').value;
+    const landArea = document.getElementById('editLand').value;
     
-    // NOTE: Using the new key here as well for consistency
-    localStorage.setItem('desa_info_v3', JSON.stringify(villageInfo));
-    showToast("Informasi Desa berhasil diperbarui!", "success");
+    // Save to Firebase
+    updateVillageInfoFirebase(heroDesc, aboutText, populationCount, landArea);
 }
 
 // --- 6. UTILS ---
@@ -478,6 +433,7 @@ window.addEventListener('scroll', function() {
 });
 
 // --- INIT ---
-window.onload = function() {
+window.addEventListener('load', function() {
+    initializeFirebaseListeners();
     renderPublic();
-};
+});
