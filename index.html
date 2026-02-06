@@ -52,7 +52,7 @@
                 
                 <div class="text-left text-white drop-shadow-md">
                     <h1 class="text-xl font-bold leading-none text-desaGold">DESA RULUNG SARI</h1>
-                    <p class="text-xs text-gray-200">Kabupaten Lampung Sari</p>
+                    <p class="text-xs text-gray-200">Kabupaten Lampung Selatan</p>
                 </div>
             </div>
 
@@ -140,8 +140,7 @@
                         Selamat Datang di <br><span class="text-desaGold">Desa Rulung Sari</span>
                     </h1>
                     <p class="text-lg md:text-xl mb-8 font-light text-gray-100 max-w-2xl mx-auto drop-shadow-md" id="hero-desc">
-                       Menuju desa yang mandiri, berbudaya, dan teknologi tepat guna bersama program KKN Universitas Kita.
-                    </p>
+                        Mewujudkan Desa Rulung Sari Menjadi Desa Mandiri Melalui Bidang Pertanian Dan Industri Kecil                    </p>
                     <div class="flex flex-col md:flex-row gap-4 justify-center">
                         <a href="#profil" class="bg-desaGreen hover:bg-green-800 text-white px-8 py-3 rounded-full font-semibold transition shadow-lg transform hover:-translate-y-1 hover:shadow-green-500/50">Jelajahi Desa</a>
                     </div>
@@ -174,18 +173,18 @@
                             </div>
                             <h3 class="text-4xl font-bold mb-6 text-gray-900 leading-tight">Keindahan Alam & <br>Keramahan Warga</h3>
                             <p class="text-gray-600 leading-relaxed mb-8 text-lg" id="about-text">
-                                Desa Sejahtera terletak di kaki pegunungan yang asri. Mayoritas penduduk bermata pencaharian sebagai petani dan pengrajin. Kami berkomitmen untuk memajukan desa melalui digitalisasi tanpa meninggalkan kearifan lokal.
+                                Desa Rulung Sari merupakan Desa Pemekaran dari Desa Rulung Helok. Secara resmi Desa Rulung Sari berdiri tanggal 06 Mei 2013 sesuai dengan surat Pengesahan Desa dari Kecamatan Natar dan Kabupaten Lampung Selatan. Pada tahun 2013 penduduk Desa Rulung Sari sejumlah 1.006 KK dan sebanyak 3779 jiwa.
                             </p>
                             <div class="grid grid-cols-2 gap-6">
                                 <div class="bg-desaCream p-5 rounded-2xl border-l-4 border-desaGreen">
                                     <!-- ID Added for Dynamic Data -->
-                                    <h4 id="public-population" class="font-bold text-3xl text-desaGreen mb-1">1.2k+</h4>
+                                    <h4 id="public-population" class="font-bold text-3xl text-desaGreen mb-1">4.459</h4>
                                     <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Penduduk</p>
                                 </div>
                                 <div class="bg-desaCream p-5 rounded-2xl border-l-4 border-desaGold">
                                     <!-- ID Added for Dynamic Data -->
-                                    <h4 id="public-land" class="font-bold text-3xl text-desaGold mb-1">450Ha</h4>
-                                    <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Lahan Tani</p>
+                                    <h4 id="public-land" class="font-bold text-3xl text-desaGold mb-1">1.195Ha</h4>
+                                    <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Lahan</p>
                                 </div>
                             </div>
                         </div>
@@ -425,9 +424,11 @@
                         <h2 class="text-3xl font-bold">Dashboard Admin</h2>
                         <p class="text-green-200">Kelola konten website desa dengan mudah.</p>
                     </div>
-                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                    </button>
+                    <div class="flex gap-3">
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-lg text-sm font-bold transition shadow">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -442,7 +443,7 @@
                 <!-- Admin: Kelola Berita -->
                 <div id="admin-panel-berita" class="bg-white rounded-lg shadow-md p-6 fade-in">
                     <h3 class="text-xl font-bold mb-4 border-b pb-2">Tambah Berita Baru</h3>
-                    <form onsubmit="addNews(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <form id="add-news-form" onsubmit="addNews(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-bold text-gray-700 mb-1">Judul Berita</label>
                             <input type="text" id="newsTitle" required class="w-full p-2 border rounded focus:border-desaGreen outline-none">
@@ -459,6 +460,7 @@
                                 <option>Pengumuman</option>
                                 <option>Ekonomi</option>
                                 <option>Organisasi</option>
+                                <option>Kegiatan</option>
                             </select>
                         </div>
                         <div class="md:col-span-2">
@@ -511,7 +513,7 @@
                 <!-- Admin: Kelola Galeri -->
                 <div id="admin-panel-galeri" class="bg-white rounded-lg shadow-md p-6 fade-in hidden">
                     <h3 class="text-xl font-bold mb-4 border-b pb-2">Tambah Foto Galeri</h3>
-                    <form onsubmit="addGallery(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <form id="add-gallery-form" onsubmit="addGallery(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-1">Judul Foto</label>
                             <input type="text" id="galleryTitle" required class="w-full p-2 border rounded focus:border-desaGreen outline-none">

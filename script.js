@@ -1,63 +1,280 @@
-// --- HELPER: CONVERT FILE TO BASE64 ---
-const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
-        fileReader.onload = () => {
-            resolve(fileReader.result);
-        };
-        fileReader.onerror = (error) => {
-            reject(error);
-        };
-    });
+// --- 1. DATA MANAGEMENT WITH LOCALSTORAGE ---
+// 📝 CARA KERJA CONTENT MANAGEMENT:
+// 
+// STEP 1: Edit konten di bawah ini (defaultNewsData, defaultGalleryData, defaultVillageInfo)
+//         Perubahan akan disimpan dalam KODE
+//
+// STEP 2: Klik tombol "Reset ke Default" di halaman admin
+//         Data akan dimuat dari kode dan localStorage dihapus
+//
+// STEP 3: Konten baru langsung muncul di website
+//
+// STEP 4: Setelah itu, admin bisa UPDATE konten lewat FORM DI WEBSITE
+//         Perubahan akan disimpan di localStorage (browser)
+//
+// ⚠️ PENTING: Jangan hapus koma, kurung, atau tanda kutip!
+//            Hanya ubah nilai di dalam tanda kutip atau elemen array.
+
+// ========================================
+// 📰 DATA KABAR/BERITA DESA
+// ========================================
+// Gunakan path: "image/nama-file.jpeg" untuk file lokal
+// ATAU gunakan URL: "https://..." untuk gambar online
+// 
+// File foto tersedia di folder image/:
+// foto 1.jpeg, foto 2.jpeg, foto 3.jpeg, foto 4.jpeg, foto 5.jpeg
+// foto 6.jpeg, foto 7.jpeg, foto 8.jpeg, foto 9.jpeg, foto 10.jpeg
+// foto 11.jpeg, foto desa.jpeg, logo lamsel.jpeg
+
+const defaultNewsData = [
+    {
+        id: 1,
+        title: "Rapat Koordinasi RT",
+        date: "2026-01-08",
+        category: "Organisasi",
+        image: "image/foto 8.jpeg",
+        summary: "Rapat Koordinasi RT Desa Rulung Sari yang dihadiri oleh perangkat desa dan para Ketua RT guna membahas koordinasi, evaluasi, serta penyampaian informasi terkait kegiatan dan pelayanan kepada masyarakat.",
+        content: "Pemerintah Desa Rulung Sari melaksanakan Rapat Koordinasi RT yang bertempat di ruang pertemuan desa. Kegiatan ini dihadiri oleh perangkat desa, para Ketua RT, serta perwakilan masyarakat. Rapat koordinasi ini bertujuan untuk memperkuat komunikasi dan sinergi antara pemerintah desa dan Ketua RT dalam pelaksanaan pelayanan kepada masyarakat. Dalam rapat tersebut dibahas berbagai hal terkait evaluasi kegiatan yang telah berjalan, penyampaian informasi desa, serta koordinasi rencana kegiatan ke depan. Melalui rapat koordinasi ini diharapkan tercipta kesamaan pemahaman, peningkatan kinerja RT, serta pelayanan yang lebih optimal bagi masyarakat Desa Rulung Sari."
+    },
+    {
+        id: 2,
+        title: "Ngapunten Izin Healing Karang Taruna",
+        date: "2025-11-16",
+        category: "Kegiatan",
+        image: "image/foto 10.jpeg",
+        summary: "Karang Taruna Desa Rulung Sari melaksanakan kegiatan ‘Ngepunten Izin Healing’ sebagai bentuk kebersamaan dan penyegaran bagi anggota. Kegiatan ini diikuti oleh pemuda-pemudi Karang Taruna dengan penuh semangat dan kebersamaan.",
+        content: "Karang Taruna Desa Rulung Sari melaksanakan kegiatan bertajuk ‘Ngepunten Izin Healing’ sebagai bentuk kebersamaan dan penguatan solidaritas antaranggota. Kegiatan ini diikuti oleh pemuda dan pemudi Karang Taruna Desa Rulung Sari dengan penuh antusias dan semangat kebersamaan.Kegiatan healing ini bertujuan untuk memberikan penyegaran fisik dan mental setelah berbagai aktivitas dan program kerja yang telah dijalankan. Selain sebagai sarana rekreasi, kegiatan ini juga menjadi momen penting untuk mempererat tali silaturahmi, meningkatkan kekompakan, serta menumbuhkan rasa kebersamaan antaranggota Karang Taruna.Selama kegiatan berlangsung, seluruh peserta mengikuti rangkaian acara dengan tertib dan penuh keceriaan. Suasana kebersamaan terlihat jelas melalui interaksi antaranggota yang saling mendukung dan menjaga kekompakan. Diharapkan melalui kegiatan ini, Karang Taruna Desa Rulung Sari dapat kembali menjalankan peran dan program kerjanya dengan semangat baru, ide-ide segar, serta komitmen yang lebih kuat dalam mendukung pembangunan dan kegiatan sosial di Desa Rulung Sari."
+    },
+    {
+        id: 3,
+        title: "Gotong Royong Bersama Perangkat Desa",
+        date: "2026-01-08",
+        category: "Kegiatan",
+        image: "image/foto 9.jpeg",
+        summary: "Pemerintah Desa Rulung Sari bersama perangkat desa dan masyarakat melaksanakan kegiatan gotong royong sebagai bentuk kebersamaan dan kepedulian terhadap kebersihan serta lingkungan desa.",
+        content: "Pemerintah Desa Rulung Sari bersama perangkat desa dan masyarakat melaksanakan kegiatan gotong royong sebagai wujud kebersamaan dan kepedulian terhadap kebersihan serta kelestarian lingkungan desa. Kegiatan ini dilaksanakan dengan melibatkan berbagai unsur masyarakat yang secara bersama-sama bekerja membersihkan lingkungan sekitar. Gotong royong ini bertujuan untuk menciptakan lingkungan desa yang bersih, sehat, dan nyaman, sekaligus mempererat hubungan antara pemerintah desa dan masyarakat. Melalui kegiatan ini, nilai-nilai kebersamaan, kepedulian sosial, dan semangat kerja sama terus ditumbuhkan di tengah kehidupan bermasyarakat. Selama kegiatan berlangsung, perangkat desa dan masyarakat terlihat antusias dalam melaksanakan berbagai aktivitas seperti membersihkan area umum, merapikan lingkungan, serta menjaga fasilitas desa. Diharapkan melalui kegiatan gotong royong ini, kesadaran masyarakat akan pentingnya menjaga kebersihan dan keindahan lingkungan semakin meningkat, sehingga tercipta Desa Rulung Sari yang bersih, sehat, dan asri."
+    },
+    {
+        id: 4,
+        title: "Lokakarya KKN Unila Periode 1 2026",
+        date: "2026-01-12",
+        category: "Kegiatan",
+        image: "image/foto lokakarya.jpeg",
+        summary: "Kegiatan Lokakarya KKN Universitas Lampung Periode 1 Tahun 2026 dilaksanakan di Aula Balai Desa Rulung Sari bersama perangkat desa dan warga sebagai wadah penyampaian program kerja serta diskusi dan kolaborasi pembangunan desa.",
+        content: `Mahasiswa Kuliah Kerja Nyata (KKN) Universitas Lampung Periode 1 Tahun 2026 melaksanakan kegiatan lokakarya yang bertempat di Aula Balai Desa Rulung Sari. Kegiatan ini dihadiri oleh perangkat desa, tokoh masyarakat, serta warga Desa Rulung Sari. Lokakarya ini bertujuan untuk memperkenalkan mahasiswa KKN kepada masyarakat sekaligus memaparkan rencana program kerja yang akan dilaksanakan selama masa pengabdian.
+        Dalam kegiatan lokakarya ini, mahasiswa KKN menyampaikan berbagai program yang berfokus pada pemberdayaan masyarakat, peningkatan kualitas sumber daya manusia, serta dukungan terhadap pembangunan desa. Selain pemaparan program, kegiatan ini juga menjadi sarana diskusi dan penyerapan aspirasi masyarakat agar program KKN dapat berjalan selaras dengan kebutuhan dan potensi Desa Rulung Sari.
+        Melalui lokakarya ini, diharapkan terjalin kerja sama yang baik antara mahasiswa KKN, pemerintah desa, dan masyarakat. Sinergi tersebut diharapkan mampu mendukung terlaksananya program-program KKN secara optimal serta memberikan manfaat nyata bagi Desa Rulung Sari selama dan setelah pelaksanaan KKN Universitas Lampung Periode 1 Tahun 2026.`
+    },
+    {
+        id: 5,
+        title: "Kegiatan Kolaborasi Karang Taruna x Pasar Malam",
+        date: "2025-10-15",
+        category: "Kegiatan",
+        image: "image/foto 11.jpeg",
+        summary: "Karang Taruna Desa Rulung Sari melaksanakan kegiatan kolaborasi dengan penyelenggara pasar malam di Lapangan Balai Desa sebagai upaya mendukung kegiatan hiburan masyarakat sekaligus meningkatkan kebersamaan dan partisipasi pemuda desa.",
+        content: `Karang Taruna Desa Rulung Sari melaksanakan kegiatan kolaborasi dengan penyelenggara pasar malam yang bertempat di Lapangan Balai Desa. Kegiatan ini merupakan bentuk peran aktif pemuda desa dalam mendukung kegiatan hiburan masyarakat sekaligus meningkatkan partisipasi dan kebersamaan warga.
+        Kolaborasi ini bertujuan untuk menciptakan suasana hiburan yang aman, tertib, dan nyaman bagi masyarakat, serta memberikan ruang bagi pemuda desa untuk terlibat langsung dalam kegiatan sosial dan ekonomi desa. Keberadaan pasar malam diharapkan dapat menjadi sarana hiburan bagi masyarakat sekaligus menggerakkan roda perekonomian lokal.
+        Selama kegiatan berlangsung, Karang Taruna berperan dalam membantu pengaturan lokasi, menjaga ketertiban, serta mendukung kelancaran aktivitas pasar malam. Antusiasme masyarakat terlihat tinggi dalam menyambut kegiatan ini. Diharapkan melalui kolaborasi antara Karang Taruna dan penyelenggara pasar malam, terjalin kerja sama yang baik dan berkelanjutan guna mendukung kegiatan-kegiatan positif lainnya di Desa Rulung Sari.`
+    },
+    {
+        id: 6,
+        title: "Sosialisasi Calon Anggota Koperasi Desa",
+        date: "2025-11-10",
+        category: "Organisasi",
+        image: "image/foto 3.jpeg",
+        summary: "Kegiatan Sosialisasi Calon Anggota Koperasi Desa dilaksanakan di Aula Balai Desa Rulung Sari sebagai upaya memberikan pemahaman kepada masyarakat mengenai manfaat dan mekanisme keanggotaan koperasi desa.",
+        content: `Pemerintah Desa Rulung Sari melaksanakan kegiatan Sosialisasi Calon Anggota Koperasi Desa yang bertempat di Aula Balai Desa Rulung Sari. Kegiatan ini dihadiri oleh perangkat desa dan masyarakat sebagai calon anggota koperasi desa. Sosialisasi ini bertujuan untuk memberikan pemahaman kepada masyarakat mengenai peran, manfaat, serta mekanisme keanggotaan koperasi desa dalam mendukung peningkatan perekonomian masyarakat.
+        Dalam kegiatan sosialisasi tersebut disampaikan penjelasan mengenai tujuan pembentukan koperasi desa, hak dan kewajiban anggota, serta peluang usaha yang dapat dikembangkan melalui koperasi. Selain itu, peserta juga diberikan kesempatan untuk berdiskusi dan menyampaikan pertanyaan terkait pengelolaan dan partisipasi dalam koperasi desa.
+        Melalui kegiatan sosialisasi ini, diharapkan masyarakat dapat memahami pentingnya koperasi sebagai wadah ekonomi bersama yang dikelola secara transparan dan berkelanjutan. Kegiatan ini juga diharapkan mampu meningkatkan minat dan partisipasi masyarakat untuk bergabung sebagai anggota koperasi desa demi mewujudkan kemandirian dan kesejahteraan ekonomi Desa Rulung Sari.`
+    },
+    {
+        id: 7,
+        title: "Kegiatan Posyandu Dusun 3",
+        date: "2026-01-14",
+        category: "Sosial",
+        image: "image/foto posyandu.jpeg",
+        summary: "Mahasiswa KKN Universitas Lampung melaksanakan kegiatan Posyandu di Dusun III bersama kader dan bidan desa, sekaligus mengadakan sosialisasi pencegahan stunting kepada masyarakat.",
+        content: `Mahasiswa Kuliah Kerja Nyata (KKN) Universitas Lampung melaksanakan kegiatan Posyandu di Dusun III Desa Rulung Sari bekerja sama dengan kader Posyandu dan bidan desa. Kegiatan ini diikuti oleh masyarakat, khususnya ibu dan balita, sebagai bentuk dukungan terhadap peningkatan pelayanan kesehatan ibu dan anak di tingkat desa.
+        Dalam kegiatan Posyandu tersebut, mahasiswa KKN turut membantu pelaksanaan pelayanan kesehatan seperti penimbangan balita, pengukuran tinggi badan, serta pencatatan tumbuh kembang anak. Selain itu, mahasiswa KKN Universitas Lampung juga melaksanakan sosialisasi pencegahan stunting yang bertujuan untuk meningkatkan pemahaman masyarakat mengenai pentingnya pemenuhan gizi sejak dini.
+        Sosialisasi stunting yang disampaikan oleh mahasiswa KKN mencakup penjelasan tentang pengertian stunting, faktor penyebab, dampak jangka panjang, serta langkah-langkah pencegahan yang dapat dilakukan oleh keluarga, khususnya melalui pemberian gizi seimbang dan pola asuh yang tepat. Melalui kegiatan ini, diharapkan terjalin sinergi antara mahasiswa KKN, tenaga kesehatan, dan masyarakat dalam upaya mencegah stunting serta mewujudkan generasi Desa Rulung Sari yang sehat dan berkualitas.`
+    },
+    {
+        id: 8,
+        title: "Musyawarah Desa Penetapan APBDes Tahun Anggaran 2026",
+        date: "2025-09-10",
+        category: "Organisasi",
+        image: "image/foto 7.jpeg",
+        summary: "Pemerintah Desa Rulung Sari melaksanakan Musyawarah Desa Penetapan Anggaran Pendapatan dan Belanja Desa (APBDes) Tahun Anggaran 2026 sebagai bentuk transparansi dan partisipasi masyarakat dalam perencanaan pembangunan desa.",
+        content: `Pemerintah Desa Rulung Sari melaksanakan kegiatan Musyawarah Desa Penetapan Anggaran Pendapatan dan Belanja Desa (APBDes) Tahun Anggaran 2026. Kegiatan ini dilaksanakan sebagai bagian dari proses perencanaan dan pengelolaan keuangan desa yang transparan dan akuntabel. Musyawarah desa ini dihadiri oleh perangkat desa, Badan Permusyawaratan Desa (BPD), lembaga kemasyarakatan desa, serta perwakilan masyarakat.
+        Dalam musyawarah tersebut dibahas dan disepakati rancangan APBDes Tahun Anggaran 2026 yang mencakup rencana pendapatan desa, alokasi belanja desa, serta pembiayaan desa. Seluruh peserta musyawarah diberikan kesempatan untuk menyampaikan pendapat, masukan, dan saran guna memastikan anggaran yang ditetapkan sesuai dengan kebutuhan dan prioritas pembangunan Desa Rulung Sari.
+        Melalui Musyawarah Desa Penetapan APBDes ini, diharapkan tercipta kesepakatan bersama yang mencerminkan aspirasi masyarakat serta mendukung pelaksanaan pembangunan desa yang berkelanjutan. Kegiatan ini juga menjadi wujud komitmen Pemerintah Desa Rulung Sari dalam mewujudkan tata kelola pemerintahan desa yang baik, transparan, dan partisipatif.`
+    },
+    {
+        id: 9,
+        title: "Kegiatan Sosialisasi IoT di SMP Harapan",
+        date: "2026-01-24",
+        category: "Kegiatan",
+        image: "image/foto sosialisasi IoT ke SMP Harapan.jpeg",
+        summary: "Mahasiswa KKN Universitas Lampung Periode 1 Tahun 2026 melaksanakan kegiatan Sosialisasi Internet of Things (IoT) di SMP Harapan sebagai upaya pengenalan teknologi kepada siswa.",
+        content: `Mahasiswa Kuliah Kerja Nyata (KKN) Universitas Lampung Periode 1 Tahun 2026 melaksanakan kegiatan Sosialisasi Internet of Things (IoT) di SMP Harapan. Kegiatan ini bertujuan untuk memperkenalkan konsep dasar teknologi IoT kepada siswa serta meningkatkan literasi teknologi di lingkungan sekolah.
+        Dalam kegiatan sosialisasi ini, mahasiswa KKN menyampaikan materi mengenai pengertian Internet of Things, contoh penerapannya dalam kehidupan sehari-hari, serta manfaat teknologi IoT di berbagai bidang. Penyampaian materi dilakukan secara interaktif agar siswa lebih mudah memahami perkembangan teknologi dan penggunaannya secara positif.
+        Melalui kegiatan sosialisasi IoT ini, diharapkan siswa SMP Harapan dapat menambah wawasan dan ketertarikan terhadap teknologi digital sejak dini. Kegiatan ini juga menjadi bentuk kontribusi mahasiswa KKN Universitas Lampung dalam mendukung peningkatan kualitas pendidikan dan pengetahuan teknologi di Desa Rulung Sari.`
+    },
+    {
+        id: 10,
+        title: "Kegiatan Memperingati Hari Kartini",
+        date: "2025-04-21",
+        category: "Sosial",
+        image: "image/foto 4.jpeg",
+        summary: "Perangkat Desa Rulung Sari melaksanakan kegiatan peringatan Hari Kartini sebagai bentuk penghormatan terhadap perjuangan dan peran perempuan dalam pemerintahan dan pembangunan desa.",
+        content: `Dalam rangka memperingati Hari Kartini, Perangkat Desa Rulung Sari melaksanakan kegiatan peringatan Hari Kartini sebagai wujud penghormatan terhadap jasa dan perjuangan R.A. Kartini. Kegiatan ini diselenggarakan untuk menumbuhkan semangat emansipasi serta mengapresiasi peran perempuan, khususnya dalam lingkungan pemerintahan desa.
+        Peringatan Hari Kartini ini menjadi momentum untuk memperkuat kebersamaan antarperangkat desa serta meningkatkan kesadaran akan pentingnya peran perempuan dalam mendukung pelayanan publik dan pembangunan desa. Kegiatan dilaksanakan dengan penuh kebersamaan dan semangat kekeluargaan.
+        Melalui kegiatan peringatan Hari Kartini ini, diharapkan nilai-nilai perjuangan R.A. Kartini dapat terus diteladani dan diterapkan dalam pelaksanaan tugas pemerintahan desa, sehingga tercipta aparatur desa yang profesional, berdaya, dan berkomitmen dalam melayani masyarakat Desa Rulung Sari.`
+    },
+    {
+        id: 11,
+        title: "Kegiatan Penyaluran BLT DD Triwulan IV",
+        date: "2025-12-12",
+        category: "Sosial",
+        image: "image/foto 5.jpeg",
+        summary: "Pemerintah Desa Rulung Sari melaksanakan kegiatan Penyaluran Bantuan Langsung Tunai Dana Desa (BLT DD) Triwulan IV kepada Keluarga Penerima Manfaat sesuai ketentuan yang berlaku.",
+        content: `Pemerintah Desa Rulung Sari melaksanakan kegiatan Penyaluran Bantuan Langsung Tunai Dana Desa (BLT DD) Triwulan IV sebagai bentuk dukungan pemerintah desa kepada masyarakat yang tergolong sebagai Keluarga Penerima Manfaat (KPM). Kegiatan ini dilaksanakan sesuai dengan peraturan dan ketentuan yang berlaku serta berpedoman pada prinsip transparansi dan akuntabilitas.
+        Penyaluran BLT DD Triwulan IV ini bertujuan untuk membantu meringankan beban ekonomi masyarakat serta meningkatkan daya beli keluarga penerima manfaat. Proses penyaluran dilakukan secara tertib dan terorganisir dengan melibatkan perangkat desa guna memastikan bantuan diterima langsung oleh masyarakat yang berhak.
+        Melalui kegiatan penyaluran BLT DD ini, Pemerintah Desa Rulung Sari berharap bantuan yang diberikan dapat dimanfaatkan dengan sebaik-baiknya oleh KPM untuk memenuhi kebutuhan pokok. Kegiatan ini juga menjadi wujud komitmen pemerintah desa dalam mendukung kesejahteraan masyarakat serta pelaksanaan program perlindungan sosial di tingkat desa.`
+    }
+];
+
+// ========================================
+// 🖼️ DATA GALERI DESA
+// ========================================
+const defaultGalleryData = [
+    {
+        id: 1,
+        title: "Balai Desa Rulung Sari",
+        image: "image/foto desa.jpeg"
+    },
+    {
+        id: 2,
+        title: "Kegiatan Posyandu Dusun 3",
+        image: "image/foto posyandu.jpeg"
+    },
+    {
+        id: 3,
+        title: "Musyawarah Desa Penetapan APBDes",
+        image: "image/foto 7.jpeg"
+    },
+    {
+        id: 4,
+        title: "Memperingati Hari Kartini",
+        image: "image/foto 4.jpeg"
+    },
+    {
+        id: 5,
+        title: "Ngapunten Izin Healing Karang Taruna",
+        image: "image/foto 10.jpeg"
+    },
+    {
+        id: 6,
+        title: "Kegiatan Kolaborasi Karang Taruna x Pasar Malam",
+        image: "image/foto 11.jpeg"
+    },
+    {
+        id: 7,
+        title: "Rapat Koordinasi Bulanan Perangkat Desa",
+        image: "image/foto 8.jpeg"
+    },
+    {
+        id: 8,
+        title: "Sosialisasi Calon Anggota Koperasi Desa",
+        image: "image/foto 3.jpeg"
+    },
+    {
+        id: 9,
+        title: "Penyaluran BLT DD TRiwulan IV",
+        image: "image/foto 5.jpeg"
+    },
+    {
+        id: 10,
+        title: "Lokakarya KKN Unila Periode 1 2026",
+        image: "image/foto lokakarya.jpeg"
+    },
+    {
+        id: 11,
+        title: "Kegiatan Gotong Royong Bersama Perangkat Desa",
+        image: "image/foto 9.jpeg"
+    },
+    {
+        id: 12,
+        title: "Sosialisasi IoT di SMP Harapan",
+        image: "image/foto sosialisasi IoT ke SMP Harapan.jpeg"
+    }
+];
+
+
+// ========================================
+// ℹ️ INFO DESA (Hero, About, dll)
+// ========================================
+const defaultVillageInfo = {
+    heroDesc: "Mewujudkan Desa Rulung Sari Menjadi Desa Mandiri Melalui Bidang Pertanian Dan Industri Kecil",
+    aboutText: "Desa Rulung Sari merupakan Desa Pemekaran dari Desa Rulung Helok. Secara resmi Desa Rulung Sari berdiri tanggal 06 Mei 2013 sesuai dengan surat Pengesahan Desa dari Kecamatan Natar dan Kabupaten Lampung Selatan. Pada tahun 2013 penduduk Desa Rulung Sari sejumlah 1.006 KK dan sebanyak 3779 jiwa.",
+    populationCount: "4.459",
+    landArea: "1.195Ha"
 };
 
-// --- INITIALIZE REALTIME LISTENERS ---
-function initializeFirebaseListeners() {
-    console.log("Initializing Firebase Listeners...");
-    
-    // Listen to News Data (Real-time update)
-    database.ref('desa/news').on('value', (snapshot) => {
-        if (snapshot.exists()) {
-            const newsObj = snapshot.val();
-            // Convert object to array if needed
-            newsData = Array.isArray(newsObj) ? newsObj : Object.values(newsObj);
-            console.log("News updated:", newsData);
-            renderPublic(); // Update UI immediately
-        } else {
-            newsData = [];
-        }
-    });
-
-    // Listen to Gallery Data (Real-time update)
-    database.ref('desa/gallery').on('value', (snapshot) => {
-        if (snapshot.exists()) {
-            const galleryObj = snapshot.val();
-            // Convert object to array if needed
-            galleryData = Array.isArray(galleryObj) ? galleryObj : Object.values(galleryObj);
-            console.log("Gallery updated:", galleryData);
-            renderPublic(); // Update UI immediately
-        } else {
-            galleryData = [];
-        }
-    });
-
-    // Listen to Village Info (Real-time update)
-    database.ref('desa/info').on('value', (snapshot) => {
-        if (snapshot.exists()) {
-            villageInfo = snapshot.val();
-            console.log("Village info updated:", villageInfo);
-            renderPublic(); // Update UI immediately
-        }
-    });
+// --- HELPER: Hitung checksum data untuk detect perubahan ---
+function getDataChecksum(data) {
+    return JSON.stringify(data).split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0).toString();
 }
 
-// --- 1. DATA MANAGEMENT ---
+// Initialize data from localStorage or use default
+// ✅ Saat pertama kali dijalankan, akan memuat data DEFAULT dari kode
+// ✅ Data yang diubah via form akan disimpan ke localStorage
+// ✅ Kalau kode diupdate, localStorage otomatis di-reset dan menampilkan data terbaru dari kode
 
-// Initialize empty arrays
-let newsData = [];
-let galleryData = [];
-let villageInfo = {};
+// Hitung checksum dari default data di kode
+const newsChecksum = getDataChecksum(defaultNewsData);
+const galleryChecksum = getDataChecksum(defaultGalleryData);
+const villageChecksum = getDataChecksum(defaultVillageInfo);
+
+// Cek apakah ada perubahan di kode
+const storedNewsChecksum = localStorage.getItem('newsChecksum');
+const storedGalleryChecksum = localStorage.getItem('galleryChecksum');
+const storedVillageChecksum = localStorage.getItem('villageChecksum');
+
+// Jika checksum berbeda, data di kode sudah berubah - reset localStorage
+if (storedNewsChecksum !== newsChecksum) {
+    localStorage.removeItem('newsData');
+    localStorage.setItem('newsChecksum', newsChecksum);
+}
+if (storedGalleryChecksum !== galleryChecksum) {
+    localStorage.removeItem('galleryData');
+    localStorage.setItem('galleryChecksum', galleryChecksum);
+}
+if (storedVillageChecksum !== villageChecksum) {
+    localStorage.removeItem('villageInfo');
+    localStorage.setItem('villageChecksum', villageChecksum);
+}
+
+// Load data dari localStorage atau gunakan default
+let newsData = localStorage.getItem('newsData') ? JSON.parse(localStorage.getItem('newsData')) : defaultNewsData;
+let galleryData = localStorage.getItem('galleryData') ? JSON.parse(localStorage.getItem('galleryData')) : defaultGalleryData;
+let villageInfo = localStorage.getItem('villageInfo') ? JSON.parse(localStorage.getItem('villageInfo')) : defaultVillageInfo;
+
+// Save data functions
+function saveNews() {
+    localStorage.setItem('newsData', JSON.stringify(newsData));
+    renderPublic();
+}
+
+function saveGallery() {
+    localStorage.setItem('galleryData', JSON.stringify(galleryData));
+    renderPublic();
+}
+
+function saveVillageInfo() {
+    localStorage.setItem('villageInfo', JSON.stringify(villageInfo));
+    renderPublic();
+}
 
 // --- 2. RENDER FUNCTIONS ---
 
@@ -139,6 +356,20 @@ function closeNewsModal() {
     document.body.style.overflow = 'auto'; // Hidupkan scroll background
 }
 
+// --- HELPER: CONVERT FILE TO BASE64 ---
+const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
+    });
+};
+
 // --- HERO SLIDER LOGIC ---
 let currentHeroIndex = 0;
 const heroImages = document.querySelectorAll('#hero-backgrounds img');
@@ -194,14 +425,14 @@ function renderAdminTable() {
     // Render Table Berita
     const tbody = document.getElementById('admin-news-table');
     tbody.innerHTML = '';
-    newsData.forEach((news) => {
+    newsData.forEach((news, index) => {
         const row = `
             <tr class="border-b hover:bg-gray-50 transition">
                 <td class="p-3 text-sm text-gray-600">${news.date}</td>
                 <td class="p-3 font-semibold text-gray-800">${news.title}</td>
                 <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">${news.category}</span></td>
                 <td class="p-3 text-center">
-                    <button onclick="deleteNewsFromFirebase('${news.id}')" class="text-red-500 hover:text-red-700 bg-red-100 hover:bg-red-200 p-2 rounded-full transition">
+                    <button onclick="deleteNews(${index})" class="text-red-500 hover:text-red-700 bg-red-100 hover:bg-red-200 p-2 rounded-full transition">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
@@ -213,14 +444,14 @@ function renderAdminTable() {
     // Render List Galeri
     const galleryList = document.getElementById('admin-gallery-list');
     galleryList.innerHTML = '';
-    galleryData.forEach((item) => {
+    galleryData.forEach((item, index) => {
         const card = `
             <div class="bg-white p-2 rounded-lg shadow border border-gray-200 relative group">
                 <div class="h-32 overflow-hidden rounded mb-2">
                     <img src="${item.image}" class="w-full h-full object-cover">
                 </div>
                 <p class="text-xs font-bold text-gray-700 truncate mb-1">${item.title}</p>
-                <button onclick="deleteGalleryFromFirebase('${item.id}')" class="w-full bg-red-100 text-red-600 text-xs py-1 rounded hover:bg-red-200 transition">
+                <button onclick="deleteGallery(${index})" class="w-full bg-red-100 text-red-600 text-xs py-1 rounded hover:bg-red-200 transition">
                     Hapus
                 </button>
             </div>
@@ -298,6 +529,20 @@ function logout() {
 }
 
 // --- 5. ADMIN ACTIONS ---
+// 
+// 📝 CARA POSTING BERITA DAN GALERI:
+// 
+// 1. Login terlebih dahulu (Username: RulungSari, Password: rulungsari21)
+// 2. Klik tab "Kelola Berita" atau "Kelola Galeri"
+// 3. Isi semua field yang diperlukan
+// 4. Klik tombol "Posting Berita" atau "Tambah Foto"
+// 5. Berita/Foto baru akan langsung muncul di halaman utama (home)
+// 6. Data disimpan ke localStorage, persist walau browser ditutup
+// 
+// ⚠️ PENTING: 
+//   - Setiap posting akan disimpan ke localStorage (browser)
+//   - Klik "Reset ke Default" akan menghapus semua posting dan balik ke data kode
+//   - Pastikan koneksi internet stabil saat upload gambar
 
 function switchAdminTab(tabName) {
     const panelBerita = document.getElementById('admin-panel-berita');
@@ -329,9 +574,13 @@ function switchAdminTab(tabName) {
     }
 }
 
-// Updated: Add News with File Support & Detail - FIREBASE VERSION
+// Updated: Add News with File Support & Detail
 async function addNews(e) {
     e.preventDefault();
+    
+    // Debug: Log form submission
+    console.log("📝 Form Submit: Posting Berita Baru");
+    
     const title = document.getElementById('newsTitle').value;
     const date = document.getElementById('newsDate').value;
     const category = document.getElementById('newsCategory').value;
@@ -339,52 +588,113 @@ async function addNews(e) {
     const detail = document.getElementById('newsDetail').value;
     const fileInput = document.getElementById('newsImage');
     
-    let image = "https://images.unsplash.com/photo-1542601906990-b4d3fb7d5c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"; // Default
-
+    // Validasi
+    if (!title || !date || !category || !summary || !detail) {
+        showToast("❌ Harap isi semua field!", "error");
+        return;
+    }
+    
+    let image = "image/foto desa.jpeg"; // Default dari folder lokal
+    
+    // Jika ada file yang diupload, convert ke base64
     if (fileInput.files.length > 0) {
         try {
+            console.log("📸 Mengkonversi gambar ke Base64...");
             image = await convertBase64(fileInput.files[0]);
+            console.log("✅ Gambar berhasil dikonversi");
         } catch (error) {
-            console.error("Error reading file:", error);
-            showToast("Gagal membaca file gambar", "error");
+            console.error("❌ Error membaca file:", error);
+            showToast("❌ Gagal membaca file gambar", "error");
             return;
         }
     }
 
-    // Save to Firebase
-    addNewsToFirebase(title, date, category, summary, detail, image);
+    const newItem = {
+        id: Date.now(),
+        title: title,
+        date: date,
+        category: category,
+        summary: summary,
+        content: detail,
+        image: image
+    };
+    
+    console.log("📰 Berita baru:", newItem);
+    
+    newsData.unshift(newItem);
+    saveNews();
+    
+    // Reset form
+    document.getElementById('add-news-form').reset();
+    fileInput.value = '';
+    
+    renderAdminTable();
+    showToast("✅ Berita berhasil ditambahkan!", "success");
+    console.log("✅ Total berita sekarang:", newsData.length);
 }
 
 function deleteNews(index) {
-    if(newsData[index]) {
-        deleteNewsFromFirebase(newsData[index].id);
-    }
+    if(!confirm("Yakin ingin menghapus berita ini?")) return;
+    
+    newsData.splice(index, 1);
+    saveNews();
+    renderAdminTable();
+    showToast("✅ Berita berhasil dihapus!", "success");
 }
 
-// Updated: Add Gallery with File Support - FIREBASE VERSION
 async function addGallery(e) {
     e.preventDefault();
+    
+    console.log("🖼️  Form Submit: Tambah Foto Galeri");
+    
     const title = document.getElementById('galleryTitle').value;
     const fileInput = document.getElementById('galleryImage');
     
+    // Validasi
+    if (!title) {
+        showToast("❌ Harap isi judul foto!", "error");
+        return;
+    }
+    
     if (fileInput.files.length === 0) {
-        showToast("Silakan pilih file gambar!", "error");
+        showToast("❌ Silakan pilih file gambar!", "error");
         return;
     }
 
     try {
+        console.log("📸 Mengkonversi gambar galeri ke Base64...");
         const image = await convertBase64(fileInput.files[0]);
-        addGalleryToFirebase(title, image);
+        
+        const newItem = {
+            id: Date.now(),
+            title: title,
+            image: image
+        };
+        
+        console.log("📷 Foto baru:", newItem);
+        galleryData.unshift(newItem);
+        saveGallery();
+        
+        // Reset form
+        document.getElementById('add-gallery-form').reset();
+        fileInput.value = '';
+        
+        renderAdminTable();
+        showToast("✅ Foto berhasil ditambahkan ke galeri!", "success");
+        console.log("✅ Total foto galeri sekarang:", galleryData.length);
     } catch (error) {
-        console.error("Error:", error);
-        showToast("Gagal mengupload gambar.", "error");
+        console.error("❌ Error:", error);
+        showToast("❌ Gagal menambahkan foto!", "error");
     }
 }
 
 function deleteGallery(index) {
-    if(galleryData[index]) {
-        deleteGalleryFromFirebase(galleryData[index].id);
-    }
+    if(!confirm("Yakin ingin menghapus foto ini?")) return;
+    
+    galleryData.splice(index, 1);
+    saveGallery();
+    renderAdminTable();
+    showToast("✅ Foto berhasil dihapus!", "success");
 }
 
 function updateVillageInfo(e) {
@@ -394,8 +704,16 @@ function updateVillageInfo(e) {
     const populationCount = document.getElementById('editPopulation').value;
     const landArea = document.getElementById('editLand').value;
     
-    // Save to Firebase
-    updateVillageInfoFirebase(heroDesc, aboutText, populationCount, landArea);
+    villageInfo = {
+        heroDesc: heroDesc,
+        aboutText: aboutText,
+        populationCount: populationCount,
+        landArea: landArea
+    };
+    
+    saveVillageInfo();
+    renderAdminTable();
+    showToast("✅ Info Desa berhasil diupdate!", "success");
 }
 
 // --- 6. UTILS ---
@@ -433,7 +751,7 @@ window.addEventListener('scroll', function() {
 });
 
 // --- INIT ---
+// Saat page load, langsung tampilkan data (dari localStorage atau default)
 window.addEventListener('load', function() {
-    initializeFirebaseListeners();
     renderPublic();
 });
